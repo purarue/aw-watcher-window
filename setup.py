@@ -11,7 +11,7 @@ setup(
     name='window_watcher',
     version="0.2.0",
     url='https://github.com/seanbreckenridge/aw-watcher-window',
-    author=["Erik Bjäreholt <erik@bjareho.lt>" "Sean Breckenridge <seanbrecke@gmail.com>",
+    author=["Erik Bjäreholt <erik@bjareho.lt>" "Sean Breckenridge <seanbrecke@gmail.com>"],
     description=('''a fork of aw-watcher-window to log window events to a file'''),
     long_description=long_description,
     long_description_content_type='text/markdown',

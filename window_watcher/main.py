@@ -117,10 +117,12 @@ def run_loop(datafile, poll_time, exclude_title=False):
                 last_window["appname"],
                 last_window["title"],
             ]
-            # logger.debug(window_row)
+            logger.debug(window_row)
             data_writer.writerow(window_row)
             # set last window to current window
             last_window = current_window
             last_window_started_at = now
+            # flush to file
+            dataf.flush()
 
         sleep(poll_time)
