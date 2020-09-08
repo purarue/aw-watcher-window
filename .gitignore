@@ -5,3 +5,6 @@ build
 dist
 *.swp
 .mypy_cache
+tags*
+*.pdf
+*.csv

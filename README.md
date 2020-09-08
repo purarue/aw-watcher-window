@@ -1,27 +1,35 @@
-aw-watcher-window
-=================
+## window_watcher
 
-Cross-platform window-Watcher for Linux (X11), macOS, Windows.
+This is a fork of [`aw-watcher-window`](https://github.com/ActivityWatch/aw-watcher-window) which doesn't connect to ActivityMonitor.
 
-[![Build Status](https://travis-ci.org/ActivityWatch/aw-watcher-window.svg?branch=master)](https://travis-ci.org/ActivityWatch/aw-watcher-window)
+It uses the core cross platform code, and instead logs the events to a CSV file. (defaults to `${XDG_DATA_DIR:-$HOME/.local/share}/window_events.csv`)
 
-## How to install
+Installs as `window_watcher`, as to not cause possible name conflicts.
 
-To install the pre-built application, go to https://activitywatch.net/downloads/
+```
+usage: A cross platform window watcher.
+Supported on: Linux (X11), macOS and Windows.
+       [-h] [--datafile DATAFILE] [--poll-time POLL_TIME]
 
-To build your own packaged application, run `make package`
+optional arguments:
+  -h, --help              show this help message and exit
+  --datafile DATAFILE     csv file to log events to
+  --poll-time POLL_TIME   seconds to wait between polling for window events
+```
 
-To install the latest git version directly from github without cloning, run
-`pip install git+https://github.com/ActivityWatch/aw-watcher-window.git`
+Similar to `aw-watcher-window`, this logs when the event started, the duration the window was focused, the application name and the window title. An excerpt:
 
-To install from a cloned version, cd into the directory and run
-`poetry install` to install inside an virtualenv. If you want to install it
-system-wide it can be installed with `pip install .`, but that has the issue
-that it might not get the exact version of the dependencies due to not reading
-the poetry.lock file.
+```
+1599589324,1,Alacritty,Alacritty
+1599589325,6,firefoxdeveloperedition,csv — CSV File Reading and Writing — Python 3.8.5 documentation - Firefox Developer Edition
+```
 
-## Note to macOS users
+## Install
 
-To log current window title the terminal needs access to macOS accessibility API.
-This can be enabled in `System Preferences > Security & Privacy > Accessibility`, then add the Terminal to this list. If this is not enabled the watcher can only log current application, and not window title.
+To install with pip:
 
+```
+pip install git+https://github.com/seanbreckenridge/aw-watcher-window
+```
+
+Converted from using `poetry` to `setuptools`; I haven't tested this on mac or windows (particularly the install process, I haven't dealt with peotry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems. This works on linux machines using X-server.

@@ -1,8 +1,9 @@
 import sys
-from typing import Optional
+from typing import Callable
+from functools import lru_cache
 
 
-def get_current_window_linux() -> Optional[dict]:
+def get_current_window_linux() -> dict:
     from . import xlib
     window = xlib.get_current_window()
 
@@ -16,7 +17,7 @@ def get_current_window_linux() -> Optional[dict]:
     return {"appname": cls, "title": name}
 
 
-def get_current_window_macos() -> Optional[dict]:
+def get_current_window_macos() -> dict:
     from . import macos
     info = macos.getInfo()
     app = macos.getApp(info)
@@ -25,7 +26,7 @@ def get_current_window_macos() -> Optional[dict]:
     return {"title": title, "appname": app}
 
 
-def get_current_window_windows() -> Optional[dict]:
+def get_current_window_windows() -> dict:
     from . import windows
     window_handle = windows.get_active_window_handle()
     app = windows.get_app_name(window_handle)
@@ -39,12 +40,13 @@ def get_current_window_windows() -> Optional[dict]:
     return {"appname": app, "title": title}
 
 
-def get_current_window() -> Optional[dict]:
+@lru_cache(1)
+def get_current_window_func() -> Callable:
     if sys.platform.startswith("linux"):
-        return get_current_window_linux()
+        return get_current_window_linux
     elif sys.platform == "darwin":
-        return get_current_window_macos()
+        return get_current_window_macos
     elif sys.platform in ["win32", "cygwin"]:
-        return get_current_window_windows()
+        return get_current_window_windows
     else:
         raise Exception("Unknown platform: {}".format(sys.platform))
