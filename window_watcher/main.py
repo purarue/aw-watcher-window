@@ -106,7 +106,7 @@ def run_loop(datafile, poll_time, exclude_title=False):
             current_window["appname"] == last_window["appname"]
             and current_window["title"] == last_window["title"]
         ):
-            continue
+            pass
         else:
             # if its different, write the previous window we were focusing to the file
             now = timestamp()
