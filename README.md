@@ -32,4 +32,4 @@ To install with pip:
 pip install git+https://github.com/seanbreckenridge/aw-watcher-window
 ```
 
-Converted from using `poetry` to `setuptools`; I haven't tested this on mac or windows (particularly the install process, I haven't dealt with peotry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems). This works on linux machines using X-server.
+Converted from using `poetry` to `setuptools`; I haven't tested this on mac or windows (particularly the install process, I haven't dealt with peotry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems). I've tested this on my linux machine, which uses X-server.
