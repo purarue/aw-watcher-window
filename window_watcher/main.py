@@ -1,12 +1,10 @@
 import sys
 import os
 import csv
-import signal
 import argparse
-import logging
 import traceback
 from time import sleep, time
-from typing import NamedTuple, Dict
+from typing import Dict
 
 from logzero import logger, logfile
 
@@ -78,25 +76,23 @@ def get_window_info() -> Dict[str, str]:
         return {"appname": "unknown", "title": "unknown"}
 
 
+def write_to_file(datafile, event_info):
+    """
+    Write an event to the file
+    Better to do this after each event, instead of keeping the file open
+    """
+    with open(datafile, "a") as dataf:
+        data_writer = csv.writer(
+            dataf, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL
+        )
+        data_writer.writerow(event_info)
+
+
 def run_loop(datafile, poll_time, exclude_title=False):
-
-    dataf = open(datafile, "a")
-    data_writer = csv.writer(
-        dataf, delimiter=",", quotechar="|", quoting=csv.QUOTE_MINIMAL
-    )
-
-    # flush file on kill
-    def signal_handler(sig, frame):
-        logger.warning(f"Caught signal, flushing to {datafile}...")
-        dataf.flush()
-        dataf.close()
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, signal_handler)
 
     last_window: dict = get_window_info()
     # when this window was focused
-    last_window_started_at = timestamp()
+    last_window_started_at: int = timestamp()
 
     while True:
         current_window: dict = get_window_info()
@@ -109,7 +105,7 @@ def run_loop(datafile, poll_time, exclude_title=False):
             pass
         else:
             # if its different, write the previous window we were focusing to the file
-            now = timestamp()
+            now: int = timestamp()
             # write to file
             window_row = [
                 last_window_started_at,
@@ -118,11 +114,8 @@ def run_loop(datafile, poll_time, exclude_title=False):
                 last_window["title"],
             ]
             logger.debug(window_row)
-            data_writer.writerow(window_row)
-            # set last window to current window
+            write_to_file(datafile, window_row)
             last_window = current_window
             last_window_started_at = now
-            # flush to file
-            dataf.flush()
 
         sleep(poll_time)
