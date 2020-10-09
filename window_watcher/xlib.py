@@ -67,8 +67,11 @@ def get_window_name(window: Window) -> str:
         # Fixing utf8 issue on Ubuntu (https://github.com/gurgeh/selfspy/issues/133)
         # Thanks to https://github.com/gurgeh/selfspy/issues/133#issuecomment-142943681
         try:
-            return d.value.decode('utf8')
-        except UnicodeError:
+            if isinstance(d.value, str):
+                return d.value
+            else:
+                return d.value.decode('utf-8')
+        except (UnicodeError, AttributeError):  # str doesnt have attribute decode (this returns bytes sometimes, strings other times??)
             logger.warning("Failed to decode one or more characters which will be skipped, bytes are: {}".format(d.value))
             if isinstance(d.value, bytes):
                 return d.value.decode('utf8', 'ignore')
