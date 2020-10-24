@@ -32,10 +32,13 @@ def main():
     ):
         raise Exception("DISPLAY environment variable not set")
 
-    if sys.platform == "darwin":
-        from . import macos
-
-        macos.background_ensure_permissions()
+    # note: this just throws a runtime error on mac for me, seems to be related
+    # to multiprocessing. I left the note in the README for how to configure this,
+    # don't think the popup is necessary
+    # https://stackoverflow.com/questions/18204782/runtimeerror-on-windows-trying-python-multiprocessing
+    #if sys.platform == "darwin":
+        # from . import macos
+        # macos.background_ensure_permissions()
 
     logger.info("aw-watcher-window started")
 

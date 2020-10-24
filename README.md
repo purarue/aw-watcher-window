@@ -33,3 +33,9 @@ pip install git+https://github.com/seanbreckenridge/aw-watcher-window
 ```
 
 Converted from using `poetry` to `setuptools`; I haven't tested this on mac or windows (particularly the install process, I haven't dealt with peotry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems). I've tested this on my linux machine, which uses X-server.
+
+## Note to macOS users
+
+To log current window title the terminal needs access to macOS accessibility API.
+This can be enabled in `System Preferences > Security & Privacy > Accessibility`, then add the Terminal to this list. If this is not enabled the watcher can only log current application, and not window title.
+
