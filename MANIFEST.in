@@ -1,0 +1,3 @@
+include *.txt
+recursive-include misc *.service
+recursive-include window_watcher *.scpt
