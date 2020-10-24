@@ -2,9 +2,9 @@ import subprocess
 from subprocess import PIPE
 import os
 
+cmd = ["osascript", os.path.join(os.path.dirname(__file__), "printAppTitle.scpt")]
 
 def getInfo() -> str:
-    cmd = ["osascript", os.path.join(os.path.dirname(os.path.realpath(__file__)), "printAppTitle.scpt")]
     p = subprocess.run(cmd, stdout=PIPE)
     return str(p.stdout, "utf8").strip()
 
