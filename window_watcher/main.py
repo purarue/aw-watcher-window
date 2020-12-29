@@ -36,9 +36,9 @@ def main():
     # to multiprocessing. I left the note in the README for how to configure this,
     # don't think the popup is necessary
     # https://stackoverflow.com/questions/18204782/runtimeerror-on-windows-trying-python-multiprocessing
-    #if sys.platform == "darwin":
-        # from . import macos
-        # macos.background_ensure_permissions()
+    # if sys.platform == "darwin":
+    # from . import macos
+    # macos.background_ensure_permissions()
 
     logger.info("aw-watcher-window started")
 
@@ -91,7 +91,7 @@ def write_to_file(datafile, event_info):
         data_writer.writerow(event_info)
 
 
-def run_loop(datafile, poll_time, exclude_title=False):
+def run_loop(datafile, poll_time):
 
     last_window: dict = get_window_info()
     # when this window was focused
