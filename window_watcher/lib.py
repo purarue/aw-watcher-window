@@ -12,7 +12,8 @@ def get_current_window_linux() -> dict:
         name = "unknown"
     else:
         cls = xlib.get_window_class(window)
-        name = xlib.get_window_name(window)
+        # remove broken line breaks, i.e. broken ^M characters
+        name = xlib.get_window_name(window).replace("\r", "")
 
     return {"appname": cls, "title": name}
 
