@@ -1,10 +1,11 @@
 import sys
 import os
 import csv
+import re
 import argparse
 import traceback
 from time import sleep, time
-from typing import Dict
+from typing import Dict, List
 
 from logzero import logger, logfile
 
@@ -42,7 +43,13 @@ def main():
 
     logger.info("aw-watcher-window started")
 
-    run_loop(datafile=args.datafile, poll_time=args.poll_time)
+    ignore_strings: List[str] = args.ignore or []
+    ignore_regexes: List[re.Pattern] = [re.compile(r) for r in ignore_strings]
+    logger.debug("Ignoring regex patterns: {}".format(ignore_regexes))
+
+    run_loop(
+        datafile=args.datafile, poll_time=args.poll_time, ignore_regexes=ignore_regexes
+    )
 
 
 def parse_args(default_poll_time: float, default_datafile: str):
@@ -51,17 +58,27 @@ def parse_args(default_poll_time: float, default_datafile: str):
         "A cross platform window watcher.\nSupported on: Linux (X11), macOS and Windows."
     )
     parser.add_argument(
+        "-d",
         "--datafile",
         type=str,
         default=default_datafile,
         help="csv file to log events to",
     )
     parser.add_argument(
+        "-p",
         "--poll-time",
         dest="poll_time",
         type=float,
         default=default_poll_time,
         help="seconds to wait between polling for window events",
+    )
+    parser.add_argument(
+        "-i",
+        "--ignore-regex",
+        dest="ignore",
+        action="append",
+        default=[],
+        help="if the application or window title matches this regex, don't write it to the file. Can be supplied multiple times",
     )
     return parser.parse_args()
 
@@ -90,8 +107,18 @@ def write_to_file(datafile, event_info):
         )
         data_writer.writerow(event_info)
 
+def matches_ignore_regex(appname: str, title: str, ignore_regexes: List[re.Pattern]) -> bool:
+    for pat in ignore_regexes:
+        if bool(re.search(pat, appname)):
+            logger.debug(f"{appname} matched {pat}, skipping write to file")
+            return True
+        if bool(re.search(pat, title)):
+            logger.debug(f"{title} matched {pat}, skipping write to file")
+            return True
+    return False
 
-def run_loop(datafile, poll_time):
+
+def run_loop(datafile: str, poll_time: float, ignore_regexes: List[re.Pattern]):
 
     last_window: dict = get_window_info()
     # when this window was focused
@@ -109,15 +136,20 @@ def run_loop(datafile, poll_time):
         else:
             # if its different, write the previous window we were focusing to the file
             now: int = timestamp()
-            # write to file
-            window_row = [
-                last_window_started_at,
-                now - last_window_started_at,
-                last_window["appname"],
-                last_window["title"],
-            ]
-            logger.debug(window_row)
-            write_to_file(datafile, window_row)
+            if not matches_ignore_regex(last_window["appname"], last_window["title"], ignore_regexes):
+                # write to file
+                window_row = [
+                    last_window_started_at,
+                    now - last_window_started_at,
+                    last_window["appname"],
+                    last_window["title"],
+                ]
+                logger.debug(window_row)
+                write_to_file(datafile, window_row)
+            # even if we're not writing to the file,
+            # we should still update the last_window and when it started, so
+            # that when it changes away from this window we have accurate
+            # information
             last_window = current_window
             last_window_started_at = now
 

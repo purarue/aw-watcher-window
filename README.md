@@ -9,12 +9,18 @@ Installs as `window_watcher`, as to not cause possible name conflicts.
 ```
 usage: A cross platform window watcher.
 Supported on: Linux (X11), macOS and Windows.
-       [-h] [--datafile DATAFILE] [--poll-time POLL_TIME]
+       [-h] [-d DATAFILE] [-p POLL_TIME] [-i IGNORE]
 
 optional arguments:
-  -h, --help              show this help message and exit
-  --datafile DATAFILE     csv file to log events to
-  --poll-time POLL_TIME   seconds to wait between polling for window events
+  -h, --help            show this help message and exit
+  -d DATAFILE, --datafile DATAFILE
+                        csv file to log events to
+  -p POLL_TIME, --poll-time POLL_TIME
+                        seconds to wait between polling for window events
+  -i IGNORE, --ignore-regex IGNORE
+                        if the application or window title matches this regex,
+                        don't write it to the file. Can be supplied multiple
+                        times
 ```
 
 Similar to `aw-watcher-window`, this logs when the event started, the duration the window was focused, the application name and the window title. An excerpt:
