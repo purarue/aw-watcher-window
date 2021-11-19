@@ -119,8 +119,9 @@ def matches_ignore_regex(appname: str, title: str, ignore_regexes: List[re.Patte
 
 
 def run_loop(datafile: str, poll_time: float, ignore_regexes: List[re.Pattern]):
-
-    last_window: dict = get_window_info()
+    # if this fails to do so the first time, crash the program
+    # otherwise -- this could be failing in the background with no warning
+    last_window: dict = get_current_window_func()()
     # when this window was focused
     last_window_started_at: int = timestamp()
 
