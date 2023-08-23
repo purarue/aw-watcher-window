@@ -42,7 +42,7 @@ pip install git+https://github.com/seanbreckenridge/aw-watcher-window
 
 Converted from using `poetry` to `setuptools`, I've tested this on Linux (X11) and MacOS (Catalina)
 
-I haven't tested this on windows (particularly the install process, I haven't dealt with peotry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems)
+I haven't tested this on windows (particularly the install process, I haven't dealt with poetry before, but [seems there are other dependencies](https://github.com/ActivityWatch/aw-watcher-window/blob/master/pyproject.toml) you may have to install for those systems)
 
 ## Note to macOS users
 
