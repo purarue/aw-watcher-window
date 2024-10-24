@@ -15,8 +15,8 @@ with io.open("README.md", encoding="utf-8") as fo:
 setup(
     name="window_watcher",
     version="0.2.0",
-    url="https://github.com/seanbreckenridge/aw-watcher-window",
-    author="Erik Bjäreholt <erik@bjareho.lt>, Sean Breckenridge <seanbrecke@gmail.com>",
+    url="https://github.com/purarue/aw-watcher-window",
+    author="Erik Bjäreholt <erik@bjareho.lt>, purarue",
     description=("""a fork of aw-watcher-window to log window events to a file"""),
     long_description=long_description,
     long_description_content_type="text/markdown",
